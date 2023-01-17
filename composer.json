@@ -1,0 +1,20 @@
+{
+  "name": "kuhschnappel/tapo-api",
+  "description": "API Connector to access Smart Home Date from Tapo Devices",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Mike Zimmer",
+      "email": "kuhschnappel@gmail.com"
+    }
+  ],
+  "require": {
+    "guzzlehttp/guzzle": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Kuhschnappel\\TapoApi\\": "Classes/"
+    }
+  }
+}
