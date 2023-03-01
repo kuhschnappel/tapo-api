@@ -3,9 +3,9 @@ declare(strict_types = 1);
 
 namespace Kuhschnappel\TapoApi;
 
-class TapoP110 extends Tapo
+trait TapoP110
 {
-
+    
     /**
      * @var Object $energyUsage
      */
@@ -14,10 +14,13 @@ class TapoP110 extends Tapo
     /**
      * get energy consumption for this and the last 2 month
      *
-     * @return array
+     * @return array|null
      */
-    function getEnergyData() : array
+    public function getEnergyData() : ?array
     {
+        if ($this->getDeviceTypeModel() != self::INTERNAL_DEVICE_TYPE_TAPO_P110)
+            return null;
+        
         $now = new \DateTime();
         $timeZone = new \DateTimeZone('UTC');
         $now->setTimezone($timeZone);
@@ -45,10 +48,13 @@ class TapoP110 extends Tapo
     /**
      * get energy usage stat object
      *
-     * @return object
+     * @return object|null
      */
-    function getEnergyUsage() : object
+    public function getEnergyUsage() : ?object
     {
+        if ($this->getDeviceTypeModel() != self::INTERNAL_DEVICE_TYPE_TAPO_P110)
+            return null;
+        
         if ($this->energyUsage == null) {
             $data = $this->sendCommand('get_energy_usage');
             $this->energyUsage = $data->result;
@@ -59,13 +65,16 @@ class TapoP110 extends Tapo
     /**
      * get current Energy Usage in Watt
      *
-     * @return int
+     * @return float|null
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    function getEnergyCurrentPower() : int
+    public function getEnergyCurrentPower() : ?float
     {
+        if ($this->getDeviceTypeModel() != self::INTERNAL_DEVICE_TYPE_TAPO_P110)
+            return null;
+        
         $energyUsage = $this->getEnergyUsage();
-        return (int) round($energyUsage->current_power/1000);
+        return (float) $energyUsage->current_power/1000;
     }
 
 }

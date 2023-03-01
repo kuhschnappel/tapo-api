@@ -7,7 +7,7 @@ This interface was developed primarily to pick up consumption data with PHP from
 
 ``` 
 // connect, handshake, login and get token to get data from device
-$device = new TapoP110('email', 'password', 'http://ip');
+$device = new Tapo('email', 'password', 'http://ip');
 ```
 
 ``` 

@@ -12,6 +12,9 @@ use phpseclib3\Crypt\AES;
 
 class Tapo
 {
+    use TapoP110;
+
+    const INTERNAL_DEVICE_TYPE_TAPO_P110 = 'SMART.TAPOPLUG.P110';
 
     /**
      * @var string $token authentification token
@@ -217,7 +220,7 @@ class Tapo
      * @return object
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    function getDeviceInfo() : object
+    public function getDeviceInfo() : object
     {
         if ($this->deviceInfo == null) {
             $data = $this->sendCommand('get_device_info');
@@ -229,7 +232,7 @@ class Tapo
     /**
      * @return string
      */
-    function getDeviceName() : string
+    public function getDeviceName() : string
     {
         $deviceInfo = $this->getDeviceInfo();
         return base64_decode($deviceInfo->nickname);
@@ -238,10 +241,38 @@ class Tapo
     /**
      * @return string
      */
-    function getDeviceSsid() : string
+    public function getDeviceSsid() : string
     {
         $deviceInfo = $this->getDeviceInfo();
         return base64_decode($deviceInfo->ssid);
     }
+
+    /**
+     * @return string
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function getDeviceType() : string
+    {
+        $deviceInfo = $this->getDeviceInfo();
+        return $deviceInfo->type;
+    }
     
+    /**
+     * @return string
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function getDeviceModel() : string
+    {
+        $deviceInfo = $this->getDeviceInfo();
+        return $deviceInfo->model;
+    }
+
+    /**
+     * @return string
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function getDeviceTypeModel() : string
+    {
+        return implode('.', [$this->getDeviceType(), $this->getDeviceModel()]);
+    }
 }
