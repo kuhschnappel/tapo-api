@@ -76,4 +76,32 @@ trait TapoP110
         return (float) $energyUsage->current_power/1000;
     }
 
+    /**
+     * get today Energy Usage in Watt Hours
+     *
+     * @return float|null
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function getEnergyToday() : ?float
+    {
+        if ($this->getDeviceTypeModel() != self::INTERNAL_DEVICE_TYPE_TAPO_P110)
+            return null;
+
+        $energyUsage = $this->getEnergyUsage();
+        return (float) $energyUsage->today_energy;
+    }
+
+    /**
+     * @return bool|null
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function isDevicePowerOn() : ?bool
+    {
+        if ($this->getDeviceTypeModel() != self::INTERNAL_DEVICE_TYPE_TAPO_P110)
+            return null;
+
+        $deviceInfo = $this->getDeviceInfo();
+        return (bool)$deviceInfo->device_on;
+    }
+
 }
