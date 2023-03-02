@@ -267,6 +267,17 @@ class Tapo
         return $deviceInfo->model;
     }
 
+
+    /**
+     * @return string
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function getDeviceRegion() : string
+    {
+        $deviceInfo = $this->getDeviceInfo();
+        return $deviceInfo->region;
+    }
+
     /**
      * @return string
      * @throws \GuzzleHttp\Exception\GuzzleException
@@ -274,5 +285,14 @@ class Tapo
     public function getDeviceTypeModel() : string
     {
         return implode('.', [$this->getDeviceType(), $this->getDeviceModel()]);
+    }
+
+    /**
+     * @return \DateTimeZone
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function getTimeZone() : \DateTimeZone
+    {
+        return new \DateTimeZone($this->getDeviceRegion());
     }
 }

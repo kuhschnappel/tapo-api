@@ -22,8 +22,7 @@ trait TapoP110
             return null;
         
         $now = new \DateTime();
-        $timeZone = new \DateTimeZone('UTC');
-        $now->setTimezone($timeZone);
+        $now->setTimezone($this->getTimeZone());
         $now->setDate((int)$now->format('Y'),(int)($now->format('m')),1);
         $now->setTime(0,0,0);
         $now->modify('-2 month');
@@ -35,7 +34,7 @@ trait TapoP110
         ];
 
         $data = $this->sendCommand('get_energy_data', $params);
-
+        
         $res = [];
         foreach($data->result->data as $key => $consumption) {
             $res[$now->getTimestamp()] = $consumption;
