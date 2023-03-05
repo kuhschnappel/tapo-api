@@ -1,6 +1,6 @@
 {
   "name": "kuhschnappel/tapo-api",
-  "description": "API Connector to access Smart Home Date from Tapo Devices",
+  "description": "API Connector to access Smart Home Data from Tapo Devices",
   "minimum-stability": "stable",
   "license": "proprietary",
   "authors": [
