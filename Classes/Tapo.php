@@ -12,9 +12,10 @@ use phpseclib3\Crypt\AES;
 
 class Tapo
 {
-    use TapoP110, TapoCommunication;
+    use TapoP110, TapoPlug, TapoCommunication;
 
-    const INTERNAL_DEVICE_TYPE_TAPO_P110 = 'SMART.TAPOPLUG.P110';
+    const INTERNAL_DEVICE_TYPE_TAPOPLUG_P110 = 'SMART.TAPOPLUG.P110';
+    const INTERNAL_DEVICE_TYPE_TAPOPLUG = 'SMART.TAPOPLUG';
 
     /**
      * @var Object $deviceInfo
@@ -40,9 +41,18 @@ class Tapo
     {
         if ($this->deviceInfo == null) {
             $data = $this->sendCommand('get_device_info');
-            $this->deviceInfo = $data->result;
+            $this->setDeviceInfo($data->result);
         }
         return $this->deviceInfo;
+    }
+
+    /**
+     * @param object $deviceInfo
+     * @return void
+     */
+    private function setDeviceInfo(object $deviceInfo)
+    {
+        $this->deviceInfo = $deviceInfo;
     }
 
     /**
