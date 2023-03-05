@@ -18,7 +18,7 @@ trait TapoP110
      */
     public function getEnergyData() : ?array
     {
-        if ($this->getDeviceTypeModel() != self::INTERNAL_DEVICE_TYPE_TAPO_P110)
+        if ($this->getDeviceTypeModel() != self::INTERNAL_DEVICE_TYPE_TAPOPLUG_P110)
             return null;
         
         $now = new \DateTime();
@@ -51,7 +51,7 @@ trait TapoP110
      */
     public function getEnergyUsage() : ?object
     {
-        if ($this->getDeviceTypeModel() != self::INTERNAL_DEVICE_TYPE_TAPO_P110)
+        if ($this->getDeviceTypeModel() != self::INTERNAL_DEVICE_TYPE_TAPOPLUG_P110)
             return null;
         
         if ($this->energyUsage == null) {
@@ -69,7 +69,7 @@ trait TapoP110
      */
     public function getEnergyCurrentPower() : ?float
     {
-        if ($this->getDeviceTypeModel() != self::INTERNAL_DEVICE_TYPE_TAPO_P110)
+        if ($this->getDeviceTypeModel() != self::INTERNAL_DEVICE_TYPE_TAPOPLUG_P110)
             return null;
         
         $energyUsage = $this->getEnergyUsage();
@@ -84,24 +84,11 @@ trait TapoP110
      */
     public function getEnergyToday() : ?float
     {
-        if ($this->getDeviceTypeModel() != self::INTERNAL_DEVICE_TYPE_TAPO_P110)
+        if ($this->getDeviceTypeModel() != self::INTERNAL_DEVICE_TYPE_TAPOPLUG_P110)
             return null;
 
         $energyUsage = $this->getEnergyUsage();
         return (float) $energyUsage->today_energy;
-    }
-
-    /**
-     * @return bool|null
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function isDevicePowerOn() : ?bool
-    {
-        if ($this->getDeviceTypeModel() != self::INTERNAL_DEVICE_TYPE_TAPO_P110)
-            return null;
-
-        $deviceInfo = $this->getDeviceInfo();
-        return (bool)$deviceInfo->device_on;
     }
 
 }

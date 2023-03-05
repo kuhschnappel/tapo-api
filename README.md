@@ -1,25 +1,30 @@
-# Kuhschnappel TapoApi P110
+# Kuhschnappel TapoApi for P100 & P110 Devices
 
 This interface was developed primarily to pick up consumption data with PHP from the TP-Link TapoP110 sockets.
 
-
 ## Usage
 
+### Communicatio with all Tapo Devices
+
+#### create an new connection
 ``` 
-// connect, handshake, login and get token to get data from device
-$device = new Tapo('email', 'password', 'http://ip');
+$device = new Tapo('email', 'password', 'http://192.168.xxx.xxx');
+$device = new Tapo('email', 'password', 'http://192.168.xxx.xxx:port');
+$device = new Tapo('email', 'password', 'http://dyndns.tld:port');
 ```
 
+#### get device name
 ``` 
-// device name
 $device->getDeviceName();
 ``` 
 
+#### get device informations
 ``` 
-// device infos
 $device->getDeviceInfo();
-
-=> stdClass Object (
+``` 
+=>
+``` 
+stdClass Object (
     [device_id] => 8022DFC785E6EC92987142C17FD2E06420996XXX
     [fw_ver] => 1.1.6 Build 221114 Rel.203339
     [hw_ver] => 1.0
@@ -54,11 +59,31 @@ $device->getDeviceInfo();
 )
 ``` 
 
-``` 
-// energy usage
-$device->getEnergyUsage();
 
-=> Object (
+### TapoPlug Devices
+
+#### Power On State
+```
+$device->isDevicePowerOff() === false;
+$device->devicePowerOff();
+$device->setDevicePower(false);
+```
+#### Power Off State
+```
+$device->isDevicePowerOff() === true;
+$device->devicePowerOn();
+$device->setDevicePower(true);
+```
+
+### TapoPlug P110 Devices
+
+#### Energy usage
+```
+$device->getEnergyUsage();
+```
+
+=> 
+``` Object (
     [today_runtime] => 1002
     [month_runtime] => 37002
     [today_energy] => 1224
@@ -71,14 +96,26 @@ $device->getEnergyUsage();
     )
     [current_power] => 118314 // in milliwat
 )
-``` 
-
-``` 
-// energy usage
-$device->getEnergyData();
-=> get an date array with consumptions for last days
 ```
 
+ 
+#### Energy usage (get an array with timestamp and consumptions for last days)
+```
+$device->getEnergyData();
+```
+=> 
+```
+Array
+(
+    [1672527600] => 1233
+    [1672614000] => 232
+    [1672700400] => 0
+    ...
+    [1680040800] => 9999
+    [1680127200] => 0
+    [1680213600] => 0
+)
+```
 
 ## Support
 
