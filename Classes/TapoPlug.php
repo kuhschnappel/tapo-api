@@ -5,67 +5,48 @@ namespace Kuhschnappel\TapoApi;
 
 trait TapoPlug
 {
-    
+
+    /**
+     * @return $this
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function setPowerOn() : self
+    {
+        return $this->setPower(true);
+    }
+
+    /**
+     * @return $this
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function setPowerOff() : self
+    {
+        return $this->setPower(false);
+    }
+
     /**
      * @return bool|null
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function isDevicePowerOn() : ?bool
+    public function getPower() : ?bool
     {
-        if ($this->getDeviceType() != self::INTERNAL_DEVICE_TYPE_TAPOPLUG)
+        if ($this->getType() != self::INTERNAL_TYPE_TAPOPLUG)
             return null;
 
-        $deviceInfo = $this->getDeviceInfo();
-        return (bool)$deviceInfo->device_on;
+        return (bool)$this->getInfo()->device_on;
     }
 
     /**
-     * @return bool|null state was set successfully, null if operation is not allowed on device
+     * @param bool $state
+     * @return $this
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function devicePowerOn() : ?bool
+    public function setPower(bool $state) : self
     {
-        if ($this->getDeviceType() != self::INTERNAL_DEVICE_TYPE_TAPOPLUG)
-            return null;
+        if ($this->getType() == self::INTERNAL_TYPE_TAPOPLUG)
+            $this->addPendingChanges('device_on', $state);
 
-        return $this->setDevicePower(true);
-    }
-
-    /**
-     * @return bool|null state was set successfully, null if operation is not allowed on device
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function devicePowerOff() : ?bool
-    {
-        if ($this->getDeviceType() != self::INTERNAL_DEVICE_TYPE_TAPOPLUG)
-            return null;
-
-        return $this->setDevicePower(false);
-    }
-
-    /**
-     * @param bool|null $state
-     * @return bool state was set successfully, null if operation is not allowed on device
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function setDevicePower(bool $state) : ?bool
-    {
-        if ($this->getDeviceType() != self::INTERNAL_DEVICE_TYPE_TAPOPLUG)
-            return null;
-
-        $params = [
-            'device_on' => $state
-        ];
-        $data = $this->sendCommand('set_device_info', $params);
-
-        if ($data->error_code === 0) {
-            $deviceInfo = $this->getDeviceInfo();
-            $deviceInfo->device_on = $state;
-            $this->setDeviceInfo($deviceInfo);
-            return true;
-        } else {
-            return false;
-        }
+        return $this;
     }
 
 }

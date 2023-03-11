@@ -13,14 +13,29 @@ $device = new Tapo('email', 'password', 'http://192.168.xxx.xxx:port');
 $device = new Tapo('email', 'password', 'http://dyndns.tld:port');
 ```
 
-#### get device name
+#### Send multiple changes to device with one command
+```
+$device->sendChangedSettings();
+```
+
+#### device name
 ``` 
-$device->getDeviceName();
+$device->getName();
+$device->setName('Gerätename')
+``` 
+
+
+#### device location
+``` 
+$device->getLongitude()
+$device->getLatitude()
+$device->setLongitude(12.00000)
+$device->setLatitude(50.000000)
 ``` 
 
 #### get device informations
 ``` 
-$device->getDeviceInfo();
+$device->getInfo();
 ``` 
 =>
 ``` 
@@ -62,17 +77,30 @@ stdClass Object (
 
 ### TapoPlug Devices
 
-#### Power On State
+#### Power On/Off
 ```
-$device->isDevicePowerOff() === false;
-$device->devicePowerOff();
-$device->setDevicePower(false);
+$device->getPower() => false / true;
+$device->setPowerOn();
+$device->setPowerOff();
+$device->setPower(false / true);
 ```
-#### Power Off State
+
+### Change some settings & send it to your Tapo Device
+
 ```
-$device->isDevicePowerOff() === true;
-$device->devicePowerOn();
-$device->setDevicePower(true);
+$device->setAvatar(TAPO::AVATAR_PLUG)
+       ->setLongitude(12.00000)
+       ->setLatitude(12.00000)
+       ->setPowerOn()
+       ->sendChangedSettings();
+```
+or 
+```
+$device->setAvatar(TAPO::AVATAR_PLUG)
+$device->setLongitude(12.00000);
+$device->setLatitude(12.00000);
+$device->setPowerOn();
+$device->sendChangedSettings();
 ```
 
 ### TapoPlug P110 Devices
