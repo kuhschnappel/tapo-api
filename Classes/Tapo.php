@@ -33,6 +33,10 @@ class Tapo
     const AVATAR_BREAD_MAKER = 'bread_maker';
     const AVATAR_HOUSE = 'house';
 
+    const STATUS_INIT = 0;
+    const STATUS_HANDSHAKE_SUCESSFULL = 1;
+    const STATUS_LOGIN_SUCESSFULL = 2;
+
     /**
      * @var Array $pendingChanges
      */
@@ -55,11 +59,14 @@ class Tapo
     }
 
     /**
-     * @return object
+     * @return object|null
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getInfo() : object
+    public function getInfo() : ?object
     {
+        if ($this->getStatus() != self::STATUS_LOGIN_SUCESSFULL)
+            return null;
+        
         if ($this->info == null) {
             $this->loadInfo();
         }
@@ -76,10 +83,14 @@ class Tapo
     }
 
     /**
-     * @return string
+     * @return string|null
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getName() : string
+    public function getName() : ?string
     {
+        if ($this->getStatus() != self::STATUS_LOGIN_SUCESSFULL)
+            return null;
+
         return base64_decode($this->getInfo()->nickname);
     }
 
@@ -96,72 +107,99 @@ class Tapo
     }
 
     /**
-     * @return string
+     * @return string|null
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getFirmwareVersion() : string
+    public function getFirmwareVersion() : ?string
     {
+        if ($this->getStatus() != self::STATUS_LOGIN_SUCESSFULL)
+            return null;
+        
         return $this->getInfo()->fw_ver;
     }
-    
+
     /**
-     * @return string
+     * @return string|null
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getDeviceId() : string
+    public function getDeviceId() : ?string
     {
+        if ($this->getStatus() != self::STATUS_LOGIN_SUCESSFULL)
+            return null;
+        
         return $this->getInfo()->device_id;
     }
 
     /**
-     * @return string
+     * @return string|null
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getSsid() : string
+    public function getSsid() : ?string
     {
+        if ($this->getStatus() != self::STATUS_LOGIN_SUCESSFULL)
+            return null;
+        
         return base64_decode($this->getInfo()->ssid);
     }
 
     /**
-     * @return string
+     * @return string|null
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getType() : string
+    public function getType() : ?string
     {
+        if ($this->getStatus() != self::STATUS_LOGIN_SUCESSFULL)
+            return null;
+        
         return $this->getInfo()->type;
     }
-    
+
     /**
-     * @return string
+     * @return string|null
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getModel() : string
+    public function getModel() : ?string
     {
+        if ($this->getStatus() != self::STATUS_LOGIN_SUCESSFULL)
+            return null;
+        
         return $this->getInfo()->model;
     }
 
 
     /**
-     * @return string
+     * @return string|null
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getRegion() : string
+    public function getRegion() : ?string
     {
+        if ($this->getStatus() != self::STATUS_LOGIN_SUCESSFULL)
+            return null;
+        
         return $this->getInfo()->region;
     }
 
     /**
-     * @return string
+     * @return string|null
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getTypeModel() : string
+    public function getTypeModel() : ?string
     {
+        if ($this->getStatus() != self::STATUS_LOGIN_SUCESSFULL)
+            return null;
+        
         return implode('.', [$this->getType(), $this->getModel()]);
     }
 
     /**
-     * @return \DateTimeZone
+     * @return \DateTimeZone|null
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getTimeZone() : \DateTimeZone
+    public function getTimeZone() : ?\DateTimeZone
     {
+        if ($this->getStatus() != self::STATUS_LOGIN_SUCESSFULL)
+            return null;
+        
         return new \DateTimeZone($this->getRegion());
     }
 
@@ -171,8 +209,8 @@ class Tapo
      */
     private function loadInfo()
     {
-        $data = $this->sendCommand('get_device_info');
-        $this->setInfo($data->result);
+        if ($data = $this->sendCommand('get_device_info'))
+            $this->setInfo($data->result);
     }
 
     /**
@@ -219,10 +257,10 @@ class Tapo
     }
 
     /**
-     * @return string
+     * @return string|null
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getAvatar() : string
+    public function getAvatar() : ?string
     {
         return $this->getInfo()->avatar;
     }
@@ -239,13 +277,15 @@ class Tapo
     }
 
 
-
     /**
-     * @return float
+     * @return float|null
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getLongitude() : float
+    public function getLongitude() : ?float
     {
+        if ($this->getStatus() != self::STATUS_LOGIN_SUCESSFULL)
+            return null;
+        
         return $this->getInfo()->latitude / 10000;
     }
 
@@ -261,11 +301,14 @@ class Tapo
     }
 
     /**
-     * @return float
+     * @return float|null
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getLatitude() : float
+    public function getLatitude() : ?float
     {
+        if ($this->getStatus() != self::STATUS_LOGIN_SUCESSFULL)
+            return null;
+        
         return $this->getInfo()->longitude / 10000;
     }
 

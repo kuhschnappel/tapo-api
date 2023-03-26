@@ -18,6 +18,9 @@ trait TapoP110
      */
     public function getEnergyData() : ?array
     {
+        if ($this->getStatus() != self::STATUS_LOGIN_SUCESSFULL)
+            return null;
+        
         if ($this->getTypeModel() != self::INTERNAL_TYPE_TAPOPLUG_P110)
             return null;
         
@@ -51,6 +54,9 @@ trait TapoP110
      */
     public function getEnergyUsage() : ?object
     {
+        if ($this->getStatus() != self::STATUS_LOGIN_SUCESSFULL)
+            return null;
+        
         if ($this->getTypeModel() != self::INTERNAL_TYPE_TAPOPLUG_P110)
             return null;
         
@@ -69,6 +75,9 @@ trait TapoP110
      */
     public function getEnergyCurrentPower() : ?float
     {
+        if ($this->getStatus() != self::STATUS_LOGIN_SUCESSFULL)
+            return null;
+        
         if ($this->getTypeModel() != self::INTERNAL_TYPE_TAPOPLUG_P110)
             return null;
         
@@ -84,6 +93,9 @@ trait TapoP110
      */
     public function getEnergyToday() : ?float
     {
+        if ($this->getStatus() != self::STATUS_LOGIN_SUCESSFULL)
+            return null;
+        
         if ($this->getTypeModel() != self::INTERNAL_TYPE_TAPOPLUG_P110)
             return null;
 
