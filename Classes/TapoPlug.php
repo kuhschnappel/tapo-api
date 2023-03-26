@@ -30,6 +30,9 @@ trait TapoPlug
      */
     public function getPower() : ?bool
     {
+        if ($this->getStatus() != self::STATUS_LOGIN_SUCESSFULL)
+            return null;
+        
         if ($this->getType() != self::INTERNAL_TYPE_TAPOPLUG)
             return null;
 
